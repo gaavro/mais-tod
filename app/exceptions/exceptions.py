@@ -4,7 +4,8 @@ class EmailAlreadyExistsError(Exception):
 
 class InvalidKeyError(Exception):
     ...
-
+class NotFoundError(Exception):
+    ...
 
 class InvalidTypeError(Exception):
     ...
