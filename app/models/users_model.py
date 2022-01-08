@@ -16,7 +16,7 @@ class Users(db.Model):
     id: int
     name: str
     email: str
-    cpf: str
+  
 
     __tablename__ = "users"
 
@@ -24,7 +24,7 @@ class Users(db.Model):
     name = Column(String(100), nullable=False)
     email = Column(String(30), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)
-    cpf = Column(String, primary_key=True)
+    
 
     @validates("email")
     def validate(self, key, email):
@@ -33,16 +33,11 @@ class Users(db.Model):
             raise UniqueUserError 
         return email
     
-    @validates("cpf")
-    def validate(self, key, cpf):
-        unique_key = Users.query.filter(Users.cpf == cpf).one_or_none()
-        if unique_key is not None:
-            raise UniqueUserError
-        return cpf
+ 
 
     @staticmethod
     def validate_register_args(data):
-        requested_args = ["name", "email", "password", "cpf"]
+        requested_args = ["name", "email", "password"]
 
         for item in requested_args:
             if item not in data.keys():
@@ -56,9 +51,10 @@ class Users(db.Model):
             if item not in requested_args:
                 raise InvalidKeyError
 
+
     @staticmethod
     def validate_login_args(data):
-        requested_args = ["cpf", "password"]
+        requested_args = ["email", "password"]
 
         for item in requested_args:
             if item not in data.keys():
@@ -74,7 +70,7 @@ class Users(db.Model):
 
     @staticmethod
     def validate_patch_args(data):
-        requested_args = ["name", "email", "password", "cpf"]
+        requested_args = ["name"]
 
         for item in data.values():
             if type(item) is not str:

@@ -24,7 +24,7 @@ def create_user():
         return {"alerta": "Informações inválidas (apenas texto)."}, 400
     except InvalidKeyError:
         return {
-            "alerta": "Informações incorretas (nome, e-mail, )."
+            "alerta": "Informações incorretas (nome, e-mail)."
         }, 400
 
 
@@ -32,7 +32,7 @@ def login_user():
     try:
         data = request.json
         Users.validate_login_args(data)
-        user = Users.query.filter_by(cpf=data["cpf"]).first()
+        user = Users.query.filter_by(email=data["email"]).first()
         if not user:
             raise NotFoundError
         if user.validate_password(data["password"]):
@@ -93,5 +93,5 @@ def change_users():
         return {"alerta": "Informações inválidas (apenas texto)."}, 400
     except InvalidKeyError:
         return {
-            "alerta": "Informações incorretas (nome, e-mail, cidade, estado, país e/ou senha)."
+            "alerta": "Informações incorretas (nome, e-mail, ou senha)."
         }, 400
