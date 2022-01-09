@@ -22,11 +22,11 @@ def register_products():
       
     except InvalidKeyError:
         return {
-            "alert": "Chave inválida! Deve conter somente as chaves: 'name', 'category' e 'price'."
+            "alert": "Chave inválida! Deve conter somente as chaves: qty, name, value."
         }, 409
     except InvalidTypeError:
         return {
-            "alert": "'name', 'category', devem ser do tipo 'str' e 'price' deve ser do tipo 'float'"
+            "alert": "informações incorretas"
         }, 409
 
 def get_all():

@@ -13,21 +13,21 @@ from app.exceptions.exceptions import (
 
 @dataclass
 class Products(db.Model):
-    allowed_keys = ["name", "category", "price"]
+    allowed_keys = [ "name", "value"]
     id: int
     name: str
-    category: str
-    price: float
+    value: float
+    
 
     __tablename__ = "products"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False, unique=True)
-    category = Column(String(30), nullable=False)
-    price = Column(Float, nullable=False)
+    name = Column(String(30), nullable=False, unique=True)
+    value = Column(Float, nullable=False)
+    
    
 
-    @validates("name", "category", "price")
+    @validates( "name", "value")
     def validates(self, key, value):
         if key == "name":
             unique_key = Products.query.filter(Products.name == value).one_or_none()
@@ -51,7 +51,6 @@ class Products(db.Model):
                 raise InvalidKeyError
         if (
             type(data["name"]) is not str
-            or type(data["category"]) is not str
-            or type(data["price"]) is not float
+            or type(data["value"]) is not float
         ):
             raise InvalidTypeError
