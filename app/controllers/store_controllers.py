@@ -14,7 +14,7 @@ def create_store():
     try:
         data = request.get_json()
         Store.validate_register_args(data)
-        store = Store(**data)
+        store = Store(**data)    
         current_app.db.session.add(store)
         current_app.db.session.commit()
        

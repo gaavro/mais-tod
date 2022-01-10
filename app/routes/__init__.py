@@ -14,3 +14,7 @@ def init_app(app: Flask):
     from app.routes.products_user_blueprint import bp_list
 
     app.register_blueprint(bp_list)
+
+    from app.routes.store_blueprint import bp_store
+
+    app.register_blueprint(bp_store)

@@ -33,14 +33,14 @@ class ProductsUser(db.Model):
     cashback= Column(Float)
     qty = Column(Integer, default= 1)
     products = relationship('Products', backref='products', uselist=False)
-    
+    users = relationship('Users', backref='users', uselist=False)
     
 
     @validates("cpf")
     def validate(self, key, cpf):
         regex = r'^[0-9]{11}$'
         result = re.fullmatch(regex, cpf)
-        unique_key = Customer.query.filter(Customer.cpf == cpf).one_or_none()
+        unique_key = Users.query.filter(Users.cpf == cpf).one_or_none()
         if not result:
             raise InvalidTypeError        
         if unique_key is not None:

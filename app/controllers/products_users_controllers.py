@@ -4,7 +4,7 @@ from flask import current_app, jsonify, request
 from app.models.products_user_model import ProductsUser
 from app.exceptions.exceptions import UniqueUserError, InvalidTypeError, InvalidKeyError, NotFoundError
 from app.models.users_model import Users
-
+import requests
 
 @jwt_required()
 def add_to_list(id):
@@ -16,12 +16,14 @@ def add_to_list(id):
         result= product.value * order['qty']
         discount= result * 0.2
         data= {"users_id": current["id"], "product_id": id, "total": result, "cashback":discount}
+        url = "https://5efb30ac80d8170016f7613d.mockapi.io/api/mock/Cashback"        
         list = ProductsUser(**data)
+        new_data = requests.post(url, data)
         current_app.db.session.add(list)
         current_app.db.session.commit()    
         return jsonify({
             "sold_at": list.sold_at,
-            "customer": list.users_id,
+            "customer": list.users.name,
             "total": list.total,
             "cashback": list.cashback,
             "products": [{
@@ -44,8 +46,6 @@ def add_to_list(id):
 def get_list():
     current = get_jwt_identity()
     result = Users.query.get(current['id'])
-    if len(result) == 0:
-        return {"alerta": "Nenhum dado encontrado"}, 404
     return jsonify(result.list_products)
   
 

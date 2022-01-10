@@ -15,24 +15,18 @@ import re
 class Store(db.Model):
     id: int
     name: str
-    email: str
+    cnpj:str
+   
   
 
     __tablename__ = "store"
 
     id = Column(Integer, primary_key= True, autoincrement=True)
     name = Column(String(100), nullable=False)
-    email = Column(String(30), nullable=False, unique=True)
     cnpj = Column(String(14), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)   
 
 
-    @validates("email")
-    def validate(self, key, email):
-        unique_key = Store.query.filter(Store.email == email).one_or_none()
-        if unique_key is not None:
-            raise UniqueUserError 
-        return email
 
     @validates("cnpj")
     def validate(self, key, cnpj):
@@ -44,7 +38,7 @@ class Store(db.Model):
 
     @staticmethod
     def validate_register_args(data):
-        requested_args = ["name", "email", "password", "cnpj"]
+        requested_args = ["name",  "password", "cnpj"]
 
         for item in requested_args:
             if item not in data.keys():

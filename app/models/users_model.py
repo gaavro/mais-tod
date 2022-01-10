@@ -16,7 +16,7 @@ class Users(db.Model):
     id: int
     name: str
     email: str
-  
+    cpf:str
 
     __tablename__ = "users"
 

@@ -21,7 +21,7 @@ def register_products():
         product = Products(**data)
         current_app.db.session.add(product)
         current_app.db.session.commit()
-        return jsonify(product)
+        return jsonify(product),201
       
     except InvalidKeyError:
         return {
@@ -38,7 +38,7 @@ def get_all():
         Products.validate_id(result)
     except NotFoundError as e:
         return e.message, 404
-    return jsonify(result)
+    return jsonify(result), 200
 
 
 def delete_products(id):
