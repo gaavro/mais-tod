@@ -9,11 +9,14 @@ from app.exceptions.exceptions import (
 from app.models.products_model import Products
 from flask_jwt_extended import jwt_required
 
-
 @jwt_required()
 def register_products():
     try:
         data = request.get_json()
+        current_store = get_jwt_identity()
+        if 'cnpj' not in current_store:
+            return {'alerta':'Usuário não autorizado para cadastrar produto'}, 401
+
         Products.validate_keys(data)
         product = Products(**data)
         current_app.db.session.add(product)
@@ -22,7 +25,7 @@ def register_products():
       
     except InvalidKeyError:
         return {
-            "alert": "Chave inválida! Deve conter somente as chaves: qty, name, value."
+            "alert": "Chave inválida! Deve conter somente as chaves:name, value."
         }, 409
     except InvalidTypeError:
         return {
@@ -37,7 +40,7 @@ def get_all():
         return e.message, 404
     return jsonify(result)
 
-@jwt_required()
+
 def delete_products(id):
     current = Products.query.get(id)
     try:
@@ -49,5 +52,6 @@ def delete_products(id):
     return "", 204
 
     
+
 
 

@@ -12,45 +12,39 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re
 
 @dataclass
-class Users(db.Model):
+class Store(db.Model):
     id: int
     name: str
     email: str
   
 
-    __tablename__ = "users"
+    __tablename__ = "store"
 
     id = Column(Integer, primary_key= True, autoincrement=True)
     name = Column(String(100), nullable=False)
     email = Column(String(30), nullable=False, unique=True)
-    cpf = Column(String(11), nullable=False, unique=True)
-    password_hash = Column(String(255), nullable=False)
-    list_products = relationship("Products", secondary="products_user", backref=backref("users"))
+    cnpj = Column(String(14), nullable=False, unique=True)
+    password_hash = Column(String(255), nullable=False)   
 
 
     @validates("email")
     def validate(self, key, email):
-        unique_key = Users.query.filter(Users.email == email).one_or_none()
+        unique_key = Store.query.filter(Store.email == email).one_or_none()
         if unique_key is not None:
             raise UniqueUserError 
         return email
 
-    @validates("cpf")
-    def validate(self, key, cpf):
-        regex = r'^[0-9]{11}$'
-        result = re.fullmatch(regex, cpf)
-        unique_key = Users.query.filter(Users.cpf == cpf).one_or_none()
-        if not result:
-            raise InvalidTypeError        
+    @validates("cnpj")
+    def validate(self, key, cnpj):
+        unique_key = Store.query.filter(Store.cnpj == cnpj).one_or_none()
         if unique_key is not None:
             raise UniqueUserError 
-        return cpf 
-    
+        return cnpj    
  
 
     @staticmethod
     def validate_register_args(data):
-        requested_args = ["name", "email", "password", "cpf"]
+        requested_args = ["name", "email", "password", "cnpj"]
 
         for item in requested_args:
             if item not in data.keys():
@@ -67,7 +61,7 @@ class Users(db.Model):
 
     @staticmethod
     def validate_login_args(data):
-        requested_args = ["cpf", "password"]
+        requested_args = ["cnpj", "password"]
 
         for item in requested_args:
             if item not in data.keys():

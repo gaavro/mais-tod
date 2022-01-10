@@ -7,17 +7,18 @@ from app.exceptions.exceptions import (
     UniqueUserError,
 )
 from app.models.users_model import Users
+from app.models.store_model import Store
 
 
-def create_user():
+def create_store():
     try:
         data = request.get_json()
-        Users.validate_register_args(data)
-        user = Users(**data)
-        current_app.db.session.add(user)
+        Store.validate_register_args(data)
+        store = Store(**data)
+        current_app.db.session.add(store)
         current_app.db.session.commit()
        
-        return jsonify(user), 201
+        return jsonify(store), 201
     except UniqueUserError:
         return {"alerta": "E-mail já cadastrado."}, 409
     except InvalidTypeError:
@@ -28,15 +29,15 @@ def create_user():
         }, 400
 
 
-def login_user():
+def login_store():
     try:
         data = request.json
-        Users.validate_login_args(data)
-        user = Users.query.filter_by(cpf=data["cpf"]).first()
-        if not user:
+        Store.validate_login_args(data)
+        store = Store.query.filter_by(cnpj=data["cnpj"]).first()
+        if not store:
             raise NotFoundError
-        if user.validate_password(data["password"]):
-            token = create_access_token(user)
+        if store.validate_password(data["password"]):
+            token = create_access_token(store)
             return {"token": token}, 200
     except NotFoundError:
         return {"alerta": "Usuário não encontrado"}, 404
@@ -46,8 +47,8 @@ def login_user():
         return {"alerta": "Informações inválidas (apenas texto)."}, 400
 
 
-def get_user():
-    result = Users.query.all()
+def get_store():
+    result = Store.query.all()
     if len(result) == 0:
         return {"alerta": "Nenhum dado encontrado"}, 404
     return jsonify(result), 200
@@ -58,10 +59,10 @@ def get_user():
 def delete_users():
     current = get_jwt_identity()
     try:
-        user = Users.query.get(current["id"])
-        if user is None:
+        store = Store.query.get(current["id"])
+        if store is None:
             raise NotFoundError
-        current_app.db.session.delete(user)
+        current_app.db.session.delete(store)
         current_app.db.session.commit()
         return "", 204
     except NotFoundError:
@@ -72,20 +73,20 @@ def delete_users():
 def change_users():
     current = get_jwt_identity()
     try:
-        user = Users.query.get(current["id"])
+        store = Store.query.get(current["id"])
         data = request.json
-        Users.validate_patch_args(data)
+        Store.validate_patch_args(data)
 
-        if not user:
+        if not store:
             raise NotFoundError
 
         for key, value in data.items():
-            setattr(user, key, value)
+            setattr(store, key, value)
 
-        current_app.db.session.add(user)
+        current_app.db.session.add(store)
         current_app.db.session.commit()
 
-        return jsonify(user), 200
+        return jsonify(store), 200
 
     except NotFoundError:
         return {"alerta": "Usuário não encontrada"}, 404

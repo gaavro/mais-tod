@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+
+from sqlalchemy.sql.schema import ForeignKey
 from app.configs.database import db
 from sqlalchemy import Column, String, Integer, Float
 from sqlalchemy.orm import relationship, validates
@@ -24,8 +26,6 @@ class Products(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(30), nullable=False, unique=True)
     value = Column(Float, nullable=False)
-    
-   
 
     @validates( "name", "value")
     def validates(self, key, value):

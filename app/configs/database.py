@@ -10,6 +10,5 @@ def init_app(app: Flask):
     app.db = db
 
     from app.models.users_model import Users
-    from app.models.customer_model import Customer
     from app.models.products_model import Products
     from app.models.products_user_model import ProductsUser

@@ -10,9 +10,6 @@ def init_app(app: Flask):
 
     app.register_blueprint(bp_product)
 
-    from app.routes.customer_blueprint import bp_customer
-
-    app.register_blueprint(bp_customer)
 
     from app.routes.products_user_blueprint import bp_list
 
