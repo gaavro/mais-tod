@@ -1,11 +1,9 @@
-# MAiSTODOS+ API
+# MAiSTODOS API
 
-A [MAISTODOS+](https://capstone-api-q3.herokuapp.com/) API fará todo o gerenciamento desses valores e repassar para uma outra API de cashback para dar ao cliente o valor do benefício de fato.
+A [MAISTODOS] API fará todo o gerenciamento desses valores e repassar para uma outra API de cashback para dar ao cliente o valor do benefício de fato.
 ## Instalação/Utilização
 Para ter acesso à estrutura da API, faça o fork e depois clone este projeto. Não esqueça de criar um database local. Inicie o venv, siga o example do arquivo `.env` e instale as dependências do projeto com `pip install -r requirements.txt`. 
 
-Para acessar os endpoints pelo Insomnia/Postman, use a URL base:
-`https://capstone-api-q3.herokuapp.com/`
 
 ## Indice
 Há duas formas de acessar a aplicação: se cadastrando como store(loja), ou como user(cliente). Como store, você podera adicionar produtos ou editá-los/deleta-los. Como user, você poderá adicionar produtos a sua lista de compras, e receber o total e o valor do cashback. 
