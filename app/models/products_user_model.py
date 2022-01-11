@@ -11,6 +11,7 @@ from app.exceptions.exceptions import (
 )
 import re
 from sqlalchemy.orm import validates
+from app.models.products_model import Products
 from app.models.users_model import Users
 
 @dataclass
@@ -21,6 +22,7 @@ class ProductsUser(db.Model):
     total: float
     users_id: Users
     qty: int
+    
 
     __tablename__ = 'products_user'
 
@@ -32,7 +34,7 @@ class ProductsUser(db.Model):
     product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
     cashback= Column(Float)
     qty = Column(Integer, default= 1)
-    products = relationship('Products', backref='products', uselist=False)
+    products = relationship('Products', backref='products', uselist=True)
     users = relationship('Users', backref='users', uselist=False)
     
 

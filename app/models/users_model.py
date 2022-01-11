@@ -26,7 +26,7 @@ class Users(db.Model):
     cpf = Column(String(11), nullable=False, unique=True)
     password_hash = Column(String(255), nullable=False)
     list_products = relationship("Products", secondary="products_user", backref=backref("users"))
-
+    
 
     @validates("email")
     def validate(self, key, email):

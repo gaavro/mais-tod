@@ -1,3 +1,4 @@
+from flask_jwt_extended import tokens
 def test_create_store(client):
     url = "/store_cadastro"
     data = {
@@ -13,3 +14,5 @@ def test_create_store(client):
     }
     res = client.post(url, json=data, headers={'Content-Type': 'application/json'})
     assert res.get_json() == expected
+
+

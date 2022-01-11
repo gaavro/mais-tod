@@ -15,20 +15,21 @@ def add_to_list(id):
         product= Products.query.filter_by(id= Products.id).first_or_404()
         result= product.value * order['qty']
         discount= result * 0.2
-        data= {"users_id": current["id"], "product_id": id, "total": result, "cashback":discount}
+        data= {"users_id": current["id"], "total":result, "product_id": id, "cashback":discount}
+        
         url = "https://5efb30ac80d8170016f7613d.mockapi.io/api/mock/Cashback"        
         list = ProductsUser(**data)
+       
         new_data = requests.post(url, data)
         current_app.db.session.add(list)
         current_app.db.session.commit()    
         return jsonify({
             "sold_at": list.sold_at,
-            "customer": list.users.name,
+            "customer": list.users,
             "total": list.total,
             "cashback": list.cashback,
             "products": [{
-                "type": list.products.name,
-                "value": list.products.value,
+                "type": list.products,
                 "qty": list.qty
             }]}) , 200            
     except UniqueUserError:
@@ -42,12 +43,6 @@ def add_to_list(id):
     except NotFoundError:
         return{"alerta": "Produto não encontrado"}, 400
 
-@jwt_required()
-def get_list():
-    current = get_jwt_identity()
-    result = Users.query.get(current['id'])
-    return jsonify(result.list_products)
-  
 
 @jwt_required()
 def remove_from_list(id):
@@ -61,6 +56,8 @@ def remove_from_list(id):
         return "", 204
     except NotFoundError:
         return {"alerta": "Usuário não encontrada"}, 404
+
+
 
 
 
