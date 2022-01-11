@@ -47,9 +47,10 @@ def login_user():
 
 
 def get_user():
-    result = Users.query.all()
-    if len(result) == 0:
-        return {"alerta": "Nenhum dado encontrado"}, 404
+    try:
+        result = Users.query.all()
+    except NotFoundError as e:
+        return e.message, 404
     return jsonify(result), 200
     
 

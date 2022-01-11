@@ -48,9 +48,10 @@ def login_store():
 
 
 def get_store():
-    result = Store.query.all()
-    if len(result) == 0:
-        return {"alerta": "Nenhum dado encontrado"}, 404
+    try:
+        result = Store.query.all()
+    except NotFoundError as e:
+        return e.message, 404
     return jsonify(result), 200
     
 

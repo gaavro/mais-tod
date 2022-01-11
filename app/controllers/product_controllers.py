@@ -37,7 +37,7 @@ def get_all():
     try:
         Products.validate_id(result)
     except NotFoundError as e:
-        return e.message, 404
+        return { "alert": "informações não encontradas" }, 404
     return jsonify(result), 200
 
 
